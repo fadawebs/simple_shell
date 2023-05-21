@@ -12,12 +12,12 @@
  * @param str The input string to be duplicated
  * @return A pointer to the duplicated string on success, or NULL on failure
  */
-char *tb_strdup(const char *str);
+char *tbtb_strdup(const char *str);
 
 int main(void)
 {
     const char *str = "Hello, world!";
-    char *new_str = tb_strdup(str);
+    char *new_str = tbtb_strdup(str);
 
     printf("Original: %s\n", str);
     printf("Copy:     %s\n", new_str);
