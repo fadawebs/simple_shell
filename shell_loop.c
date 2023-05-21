@@ -15,14 +15,16 @@ ssize_t get_input(info_t *info)
 {
     char buffer[BUFFER_SIZE];
     ssize_t bytes_read;
-    info_t temp = {0};
-    *info = temp;
     bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE);
     if (bytes_read == -1)
     {
         return (-1);
     }
-    memcpy(temp->input, buffer, bytes_read);
+    /* memcpy(info->input, buffer, bytes_read); */
+    memcpy(info->fname, buffer, bytes_read);
+    info->fname[bytes_read] = '\0';
+    free(info->fname);
+
     return (bytes_read);
 }
 
