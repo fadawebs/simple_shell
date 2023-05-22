@@ -1,111 +1,111 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "shell.h"
 
 /**
- * tbtb_strdup - duplicates a string
+ * wcstok - splits a string into words or tokens
+ * @str: the input string
+ * @d: the delimiter
  *
- * This function duplicates the input string and returns a pointer to the new
- * string. The memory for the new string is allocated dynamically using malloc.
- *
- * @param str The input string to be duplicated
- * @return A pointer to the duplicated string on success, or NULL on failure
+ * Return: a pointer to an array of strings, or NULL on failure
  */
-char *tbtb_strdup(const char *str);
 
-int main(void)
+/**
+ * char **strtow2(char *str, char d)
+ */
+
+char **wcstok(char *str, char d)
+
 {
-    const char *str = "Hello, world!";
-    char *new_str = tbtb_strdup(str);
+	int i, j, k, m, numwords = 0;
+	char **s;
 
-    printf("Original: %s\n", str);
-    printf("Copy:     %s\n", new_str);
+	if (!str || !str[0])
+		return (NULL);
 
-    free(new_str);
+	for (i = 0; str[i]; i++)
+		if ((str[i] != d && str[i + 1] == d) ||
+				(str[i] != d && !str[i + 1]) || str[i + 1] == d)
+			numwords++;
 
-    return 0;
+	if (!numwords)
+		return (NULL);
+
+	s = malloc((numwords + 1) * sizeof(char *));
+	if (!s)
+		return (NULL);
+
+	for (i = 0, j = 0; j < numwords; j++)
+
+	{
+		while (str[i] == d && str[i])
+			i++;
+		k = 0;
+		while (str[i + k] != d && str[i + k] && str[i + k] != d)
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+			if (!s[j])
+			{
+				for (k = 0; k < j; k++)
+					free(s[k]);
+				free(s);
+				return (NULL);
+			}
+		for (m = 0; m < k; m++)
+			s[j][m] = str[i++];
+		s[j][m] = '\0';
+	}
+	s[j] = NULL;
+	return (s);
 }
 
 /**
- * _putchar - writes the character c to stdout
- * @c: The character to print
- *
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
+ * is_delim - checks for delimiter  Repeat delimiters if are ignored
+ * @d: the delimiter string
+ * @c: string
+ * Return: a pointer to an array of strings, or NULL on failure
  */
-#define WRITE_BUF_SIZE 1024
+/**char **strtow(char *str, char *d)*/
 
-int _putchar(char c)
+/**char **is_delim(char c, char *d)
 {
-    static int i = 0;
-    static char buf[WRITE_BUF_SIZE];
+	int i, j, k, m, numwords = 0;
+	char **s;
+	char *str = &c;
 
-    if (c == '\0' || i >= WRITE_BUF_SIZE - 1)
-    {
-        buf[i] = '\0';
-        write(STDOUT_FILENO, buf, i);
-        i = 0;
-    }
-    if (c != '\0')
-        buf[i++] = c;
+	if (!str || !str[0])
+		return (NULL);
+	if (!d)
+		d = " ";
+	for (i = 0; str[i]; i++)
+		if (!is_delim(str[i], d) && (is_delim(str[i + 1], d) || !str[i + 1]))
+			numwords++;
 
-    return 1;
-}
+	if (!numwords)
+		return (NULL);
 
-/**
- * _strcpy - copies a string
- * @dest: the destination
- * @src: the source
- *
- * Return: pointer to destination
- */
-char *_strcpy(char *dest, const char *src)
-{
-    int i = 0;
+	s = malloc((numwords + 1) * sizeof(char *));
+	if (!s)
+		return (NULL);
 
-    if (dest == src || src == NULL)
-        return dest;
-
-    while (src[i])
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
-    return dest;
-}
-
-/**
- * _puts - prints an input string
- * @str: the string to be printed
- *
- * Return: Nothing
- */
-void _puts(const char *str)
-{
-    int i = 0;
-
-    if (!str)
-        return;
-
-    while (str[i])
-    {
-        _putchar(str[i]);
-        i++;
-    }
-}
-
-/**
- * char *tbtb_strdup(const char *str)
-{
-    size_t len = strlen(str) + 1;
-    char *new_str = malloc(len);
-
-    if (new_str == NULL)
-        return NULL;
-
-    memcpy(new_str, str, len);
-    return new_str;
+	for (i = 0, j = 0; j < numwords; j++)
+	{
+		while (is_delim(str[i], d))
+			i++;
+		k = 0;
+		while (!is_delim(str[i + k], d) && str[i + k])
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+		if (!s[j])
+		{
+			for (k = 0; k < j; k++)
+				free(s[k]);
+			free(s);
+			return	(NULL);
+		}
+		for (m = 0; m < k; m++)
+			s[j][m] = str[i++];
+		s[j][m] = '\0';
+	}
+	s[j] = NULL;
+	return (s);
 }
 */
