@@ -103,7 +103,7 @@ char *_strcat(char *dest, const char *src);
 
 /* toem_string1.c */
 char *_strcpy(char *dest, const char *src);
-char *tbtb_strdup(const char *);
+char *tbtb_strdup(const char *str);
 void _puts(const char *);
 int _putchar(char);
 
@@ -173,8 +173,8 @@ int replace_string(char **, char *);
 
 /* toem_atoi.c */
 int interactive(info_t *);
-/*int is_delim(char, char *);*/
-char **is_delim(char c, char *);
+int is_delim(char, char *);
+char **split(char *c, char *);
 int _isalpha(int);
 int _atoi(char *);
 
