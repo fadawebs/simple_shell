@@ -76,13 +76,18 @@ int _shellunsetenv(info_t *info)
  * @info: Potential arguments active.
  * Return: Always 0
  */
-int populate_env_list(info_t *info)
+int populate_env_list(info_t *info, char **env_list)
+/* int populate_env_list(info_t *info) */
 {
 	list_t *node = NULL;
 	size_t i;
-	char **env_list;
+	/* char **env_list; */
 
-	env_list = NULL;
+	/* env_list = NULL; */
+	if (env_list ==NULL)
+	{
+		return (-1);
+	}
 
 	for (i = 0; env_list[i]; i++)
 		add_node_end(&node, env_list[i], 0);
