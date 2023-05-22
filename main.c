@@ -10,6 +10,7 @@ int main(int argc, char **argv)
 {
 	info_t info[] = {INFO_INIT};
 	int fd = 2;
+	char **environ = NULL;
 
 	asm("mov %1, %0\n\t"
 			"add $3, %0"
@@ -36,7 +37,7 @@ int main(int argc, char **argv)
 		}
 		info->readfd = fd;
 	}
-	populate_env_list(info);
+	populate_env_list(info, environ);
 	read_history(info);
 	hsh(info, argv);
 	return (EXIT_SUCCESS);
