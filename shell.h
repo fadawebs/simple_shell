@@ -157,7 +157,7 @@ char *_getenv(info_t *, const char *);
 int _shellenv(info_t *);
 int _shellsetenv(info_t *);
 int _shellunsetenv(info_t *);
-int populate_env_list(info_t *);
+int populate_env_list(info_t *info, char **env_list);
 
 /* toem_getenv.c */
 char **get_env_list(info_t *);
