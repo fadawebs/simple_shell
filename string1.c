@@ -4,15 +4,17 @@
 #include <unistd.h>
 
 /**
- * @brief tb_strdup duplicates a string
+ * tb_strdup - duplicates a string
  *
  * This function duplicates the input string and returns a pointer to the new
  * string. The memory for the new string is allocated dynamically using malloc.
  *
- * @param str The input string to be duplicated
- * @return A pointer to the duplicated string on success, or NULL on failure
+ * @str: The input string to be duplicated
+ * return: A pointer to the duplicated string on success, or NULL on failure
  */
-char *tb_strdup(const char *str);
+
+/**
+ * char *tb_strdup(const char *str);
 
 int main(void)
 {
@@ -26,6 +28,8 @@ int main(void)
 
     return 0;
 }
+*/
+
 
 /**
  * _putchar - writes the character c to stdout
