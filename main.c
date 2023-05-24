@@ -1,4 +1,12 @@
+#include <unistd.h>
 #include "shell.h"
+#include <stdlib.h>
+
+#ifdef _WIN32
+extern __declspec(dllimport) char **environ;
+#else
+extern char **environ;
+#endif
 
 /**
  * main - entry point
@@ -6,16 +14,15 @@
  * @argv: arg vector
  * Return: 0 on success, 1 on error
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-	info_t info[] = INFO_INIT;
+	info_t info[] = {INFO_INIT};
 	int fd = 2;
-	char **environ = NULL;
 
 	asm("mov %1, %0\n\t"
-			"add $3, %0"
-			: "=r"(fd)
-			: "r"(fd));
+		"add $3, %0"
+		: "=r"(fd)
+		: "r"(fd));
 
 	if (argc == 2)
 	{
@@ -37,46 +44,55 @@ int main(int argc, char **argv)
 		}
 		info->readfd = fd;
 	}
+	/* Initialize the info array here */
+	info->av = argv[0];
+	info->ac = argc;
+	info->currentdir = getcwd(NULL, 0);
+
 	populate_env_list(info, environ);
 	read_history(info);
 	hsh(info, argv);
+
+	/* Free the currentdir memory */
+	if (info->currentdir)
+		free(info->currentdir);
+
+	return (EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
 }
 
 /**
- * memmove - to copy a block of memory from one location to another
+ * memmove - copy a block of memory from one location to another
+ * @dest: pointer to the destination memory block
  * @src: pointer to the source memory block
- * @dest: a pointer to the destination memory block
- * @n: number of bytes
- * Return: 0
+ * @n: number of bytes to copy
+ * Return: pointer to destination memory block
  */
-
-/**
- 
 void *memmove(void *dest, const void *src, size_t n)
 {
-    char *d = dest;
-    const char *s = src;
+	char tmp[n];
+	char *dp = dest;
+	const char *sp = src;
 
-    if (d < s) 
-    {
-        while (n--) 
+	if (dp < sp)
 	{
-            *d++ = *s++;
-        }
-    } else 
-    {
-        d += n;
-        s += n;
-        while (n--)
-	{
-            *--d = *--s;
-        }
-    }
+		for (size_t i = 0; i < n; ++i)
+			tmp[i] = sp[i];
 
-    return dest;
+		for (size_t i = 0; i < n; ++i)
+			dp[i] = tmp[i];
+	}
+	else
+	{
+		for (size_t i = n; i != 0; --i)
+			tmp[i - 1] = sp[i - 1];
+
+		for (size_t i = n; i != 0; --i)
+			dp[i - 1] = tmp[i - 1];
+	}
+
+	return dest;
 }
-*/
 
 /**
  * add - function for addition of int
@@ -89,7 +105,6 @@ int add(int y, int x)
 	return (y + x);
 }
 
-float multiply(float a, float b);
 /**
  * multiply - finds the products of two intergers
  * @a: The first integer
