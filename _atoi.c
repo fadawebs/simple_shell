@@ -1,10 +1,13 @@
 #include "shell.h"
+#include <stdio.h>
+
 /**
  * interactive - returns true if the shell is currently in interactive mode
  * @info: structure address
  *
  * Return: 1 if in interactive mode, else 0 otherwise
  */
+
 int interactive(info_t *info)
 {
 	return (isatty(STDIN_FILENO) && info->readfd <= 2);
@@ -53,58 +56,13 @@ int _atointeger(char *s)
 
 int is_delim(char c, char *d)
 {
-    while (*d)
-        if (c == *d++)
-            return (1);
-    return (0);
-}
-/**
- * split -  uses this is_delim function to split the input string into an array of strings
- * @d:  delimiters to split the string on
- * @c: the input of the string to be split
- * Return: 0
- */
-char **split(char *str, char *d)
-{
-    int i, j, k, m, numwords = 0;
-    char **s;
+	while (*d)
 
-    if (!str || !str[0])
-        return (NULL);
-    if (!d)
-        d = " ";
-    for (i = 0; str[i]; i++)
-        if (!is_delim(str[i], d) && (is_delim(str[i + 1], d) || !str[i + 1]))
-            numwords++;
-
-    if (!numwords)
-        return (NULL);
-
-    s = malloc((numwords + 1) * sizeof(char *));
-    if (!s)
-        return (NULL);
-    for (j = 0; j < numwords; j++)
-    {
-        while (is_delim(*str, d))
-            str++;
-        k = 0;
-        while (!is_delim(str[k], d) && str[k])
-            k++;
-        s[j] = malloc((k + 1) * sizeof(char));
-        if (!s[j])
-        {
-            for (k = 0; k < j; k++)
-                free(s[k]);
-            free(s);
-            return (NULL);
-        }
-        for (m = 0; m < k; m++)
-            s[j][m] = str[m];
-        s[j][m] = '\0';
-        str += k;
-    }
-    s[j] = NULL;
-    return s;
+		if (c == *d++)
+		{
+			return (1);
+		}
+	return (0);
 }
 
 /**
