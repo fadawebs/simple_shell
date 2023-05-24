@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "shell.h"
 
 /**
@@ -10,12 +11,12 @@ int main(int argc, char **argv)
 {
 	info_t info[] = {INFO_INIT};
 	int fd = 2;
-	char **environ = NULL;
+	extern char **environ;
 
 	asm("mov %1, %0\n\t"
-			"add $3, %0"
-			: "=r"(fd)
-			: "r"(fd));
+		"add $3, %0"
+		: "=r"(fd)
+		: "r"(fd));
 
 	if (argc == 2)
 	{
@@ -52,29 +53,29 @@ int main(int argc, char **argv)
  */
 
 /**
- 
+
 void *memmove(void *dest, const void *src, size_t n)
 {
-    char *d = dest;
-    const char *s = src;
+	char *d = dest;
+	const char *s = src;
 
-    if (d < s) 
-    {
-        while (n--) 
+	if (d < s)
 	{
-            *d++ = *s++;
-        }
-    } else 
-    {
-        d += n;
-        s += n;
-        while (n--)
+		while (n--)
 	{
-            *--d = *--s;
-        }
-    }
+			*d++ = *s++;
+		}
+	} else
+	{
+		d += n;
+		s += n;
+		while (n--)
+	{
+			*--d = *--s;
+		}
+	}
 
-    return dest;
+	return dest;
 }
 */
 
