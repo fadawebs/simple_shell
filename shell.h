@@ -4,6 +4,7 @@
 
 #include "list.h"
 #include <unistd.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -114,6 +115,7 @@ char *_strchr(char *, char);
 
 /* toem_tokenizer.c */
 char **strtow(char *, char *);
+char **split(char *str, char *d);
 /* char **strtow2(char *, char); */
 
 /* toem_memory.c */
@@ -145,6 +147,7 @@ void clear_info(info_t *);
 void set_info(info_t *, char **);
 /*void free_info(info_t *, int); */
 void free_info(info_t *info, bool all);
+
 /* toem_history.c */
 char *get_history_file(info_t *info);
 int write_history(info_t *info);
@@ -158,6 +161,7 @@ int _shellenv(info_t *);
 int _shellsetenv(info_t *);
 int _shellunsetenv(info_t *);
 int populate_env_list(info_t *info, char **env_list);
+/* void populate_env_list(char **env_list, list_t **head); */
 
 /* toem_getenv.c */
 char **get_env_list(info_t *);
@@ -174,7 +178,7 @@ int replace_string(char **, char *);
 /* toem_atoi.c */
 int interactive(info_t *);
 int is_delim(char, char *);
-char **split(char *c, char *);
+/* char **split(char *c, char *); */
 int _isalpha(int);
 int _atoi(char *);
 
@@ -193,4 +197,5 @@ size_t print_list(const list_t *);
 list_t *node_starts_with(list_t *, char *, char);
 ssize_t get_node_index(list_t *, list_t *);
 
+void *memmove(void *dest, const void *src, size_t n);
 #endif
