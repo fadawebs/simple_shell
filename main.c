@@ -8,7 +8,7 @@
  */
 int main(int argc, char **argv)
 {
-	info_t info[] = INFO_INIT;
+	info_t info[] = {INFO_INIT};
 	int fd = 2;
 	char **environ = NULL;
 
