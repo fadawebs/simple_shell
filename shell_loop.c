@@ -21,7 +21,7 @@ ssize_t get_input(info_t *info)
     {
         return (-1);
     }
-    if (bytes_read > 1024)
+    if (bytes_read < 1024)
     {
 	    return (-1);
     }
