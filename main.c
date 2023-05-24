@@ -42,6 +42,42 @@ int main(int argc, char **argv)
 	hsh(info, argv);
 	return (EXIT_SUCCESS);
 }
+
+/**
+ * memmove - to copy a block of memory from one location to another
+ * @src: pointer to the source memory block
+ * @dest: a pointer to the destination memory block
+ * @n: number of bytes
+ * Return: 0
+ */
+
+/**
+ 
+void *memmove(void *dest, const void *src, size_t n)
+{
+    char *d = dest;
+    const char *s = src;
+
+    if (d < s) 
+    {
+        while (n--) 
+	{
+            *d++ = *s++;
+        }
+    } else 
+    {
+        d += n;
+        s += n;
+        while (n--)
+	{
+            *--d = *--s;
+        }
+    }
+
+    return dest;
+}
+*/
+
 /**
  * add - function for addition of int
  * @y: the interger
