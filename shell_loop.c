@@ -15,15 +15,20 @@ ssize_t get_input(info_t *info)
 {
     char buffer[BUFFER_SIZE];
     ssize_t bytes_read;
+    info->fname = malloc(BUFFER_SIZE);
     bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE);
     if (bytes_read == -1)
     {
         return (-1);
     }
+    if (bytes_read > 1024)
+    {
+	    return (-1);
+    }
     /* memcpy(info->input, buffer, bytes_read); */
     memcpy(info->fname, buffer, bytes_read);
     info->fname[bytes_read] = '\0';
-    free(info->fname);
+    /* free(info->fname); */
 
     return (bytes_read);
 }
@@ -106,9 +111,11 @@ int hsh(info_t *info, char **argv)
         }
         else if (interactive(info))
             _putchar('\n');
+	 if (info != NULL)
         free_info(info, 0);
     }
     write_history(info);
+     if (info != NULL)
     free_info(info, 1);
     if (!interactive(info) && info->status)
         exit(info->status);
@@ -133,7 +140,8 @@ int hsh(info_t *info, char **argv)
 int find_builtin(info_t *info)
 {
     int i, built_in_ret = -1;
-    builtin_table builtintbl[] = {
+    builtin_table builtintbl[] = 
+    {
         {"env", _shellenv},
         {"exit", _shellexit},
         {"help", _shellhelp},
@@ -143,6 +151,11 @@ int find_builtin(info_t *info)
         {"alias", _shellalias},
         {"cd", _shellcd},
         {NULL, NULL}};
+    info->argv = malloc(10 * sizeof(char *));
+    if (info->argv == NULL)
+{
+    /* Handle memory allocation failure */
+}
 
     for (i = 0; builtintbl[i].type; i++)
         if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
