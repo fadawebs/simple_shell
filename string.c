@@ -9,18 +9,19 @@
  */
 int _strcmp(const char *s1, const char *s2)
 {
-	int i = 0;
+	if (s1 == NULL || s2 == NULL)
+    {
+        printf("Error: one of the strings is null\n");
+        return 0;
+    }
 
-	if (s1 != NULL)
-	{
-		_strcmp(s1, s2);
-	}
-	else 
-{
-    /* handle the case where s1 is NULL  */
+    while (*s1 != '\0' && *s2 != '\0' && *s1 == *s2)
+    {
+        s1++;
+        s2++;
+    }
 
-    printf("Error: s1 is null\n");
-}
+    return *s1 - *s2;
 }
 /*	while (s1[i] && s2[i] && s1[i] == s2[i]) */
 /*		i++; */
