@@ -1,79 +1,24 @@
 #include "shell.h"
 
 /**
- * wcstok - splits a string into words or tokens
+ * split - uses this is_delim function to split the input
+ * string into an array of strings
  * @str: the input string
  * @d: the delimiter
  *
  * Return: a pointer to an array of strings, or NULL on failure
  */
 
-/**
- * char **strtow2(char *str, char d)
- */
-
-char **wcstok(char *str, char d)
-
+char **split(char *str, char *d)
 {
 	int i, j, k, m, numwords = 0;
 	char **s;
 
 	if (!str || !str[0])
-		return (NULL);
+		/* Check if str is null or an empty string */
+		return NULL;
 
-	for (i = 0; str[i]; i++)
-		if ((str[i] != d && str[i + 1] == d) ||
-				(str[i] != d && !str[i + 1]) || str[i + 1] == d)
-			numwords++;
-
-	if (!numwords)
-		return (NULL);
-
-	s = malloc((numwords + 1) * sizeof(char *));
-	if (!s)
-		return (NULL);
-
-	for (i = 0, j = 0; j < numwords; j++)
-
-	{
-		while (str[i] == d && str[i])
-			i++;
-		k = 0;
-		while (str[i + k] != d && str[i + k] && str[i + k] != d)
-			k++;
-		s[j] = malloc((k + 1) * sizeof(char));
-			if (!s[j])
-			{
-				for (k = 0; k < j; k++)
-					free(s[k]);
-				free(s);
-				return (NULL);
-			}
-		for (m = 0; m < k; m++)
-			s[j][m] = str[i++];
-		s[j][m] = '\0';
-	}
-	s[j] = NULL;
-	return (s);
-}
-
-/**
- * is_delim - checks for delimiter  Repeat delimiters if are ignored
- * @d: the delimiter string
- * @c: string
- * Return: a pointer to an array of strings, or NULL on failure
- */
-/**char **strtow(char *str, char *d)*/
-
-/**char **is_delim(char c, char *d)
-{
-	int i, j, k, m, numwords = 0;
-	char **s;
-	char *str = &c;
-
-	if (!str || !str[0])
-		return (NULL);
-	if (!d)
+	if (!d)  /* Check if d is null */
 		d = " ";
 	for (i = 0; str[i]; i++)
 		if (!is_delim(str[i], d) && (is_delim(str[i + 1], d) || !str[i + 1]))
@@ -84,28 +29,34 @@ char **wcstok(char *str, char d)
 
 	s = malloc((numwords + 1) * sizeof(char *));
 	if (!s)
-		return (NULL);
+        return (NULL);
 
-	for (i = 0, j = 0; j < numwords; j++)
+	for (j = 0; j < numwords; j++)
 	{
-		while (is_delim(str[i], d))
-			i++;
+		while (str && is_delim(*str, d))
+			/* Check if str is null */
+			str++;
+
 		k = 0;
-		while (!is_delim(str[i + k], d) && str[i + k])
+
+		while (str && !is_delim(str[k], d) && str[k])
+			/* Check if str is null */
 			k++;
+
 		s[j] = malloc((k + 1) * sizeof(char));
 		if (!s[j])
 		{
 			for (k = 0; k < j; k++)
 				free(s[k]);
 			free(s);
-			return	(NULL);
+			return NULL;
 		}
 		for (m = 0; m < k; m++)
-			s[j][m] = str[i++];
+			s[j][m] = str[m];
 		s[j][m] = '\0';
+			if (str)
+				str += k;
 	}
 	s[j] = NULL;
-	return (s);
+	return s;
 }
-*/
