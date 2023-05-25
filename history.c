@@ -1,5 +1,5 @@
 #include "shell.h"
-#include <string.h>
+
 
 /**
  * renumber_history - renumbers the history linked list after changes

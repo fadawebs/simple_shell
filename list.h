@@ -1,3 +1,4 @@
+#include "shell.h"
 #ifndef LIST_H
 #define LIST_H
 
@@ -9,9 +10,9 @@
  */
 typedef struct list
 {
-    char *str;
-    struct list *next;
-    int num;
+char *str;
+struct list *next;
+int num;
 } list_t;
 
 #endif /* LIST_H */

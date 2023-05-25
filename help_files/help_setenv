@@ -1,5 +1,0 @@
-setenv: setenv
-    Set values of env_listment variables.
-
-    Exit Status:
-    Returns success unless an invalid option is given.

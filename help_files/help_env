@@ -1,7 +1,0 @@
-env: env
-    Print env_listment
-
-    Options:
-	NONE
-
-      Return env_listment to standard output.

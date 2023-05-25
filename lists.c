@@ -25,7 +25,7 @@ list_t *add_node_end(list_t **head, const char *str, int num)
 
 	if (str)
 	{
-		shell_node->str = tbtb_strdup(str);
+		shell_node->str = _strdup(str);
 		if (!shell_node->str)
 		{
 			free(shell_node);
@@ -92,7 +92,7 @@ list_t *add_node(list_t **head, const char *str, int num)
 
 	if (str)
 	{
-		shell_head->str = tbtb_strdup(str);
+		shell_head->str = _strdup(str);
 		if (!shell_head->str)
 		{
 			free(shell_head);

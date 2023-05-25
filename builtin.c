@@ -1,4 +1,6 @@
 #include "shell.h"
+
+
 /**
  * _shellhelp - updates on how to use the shell
  * @info: Structure containing potential arguments
@@ -9,7 +11,7 @@ int _shellhelp(info_t *info)
 	char **arg_array;
 
 	arg_array = info->argv;
-	_puts("Help functions OK. Function not yet available \n");
+	_puts("Help functions OK. Function not available \n");
 	if (0)
 		_puts(*arg_array);
 	return (0);

@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * _getenv - gets value of env_list variable
  * @info: Potential arguments active.
@@ -77,23 +78,7 @@ int _shellunsetenv(info_t *info)
  * Return: Always 0
  */
 
-/* void populate_env_list(char **env_list, list_t **head) */
-/* { */
-/**
-	if (env_list == NULL)
-		return (-1);
-
-	int i;
-	for (i = 0; env_list[i] != NULL; i++)
-	{
-		char *env_var = env_list[i];
-		add_node_end(head, env_var);
-	}
-	return (0);
-}
-**/
-int populate_env_list(info_t *info, char **env_list)
-/* int populate_env_list(info_t *info) */
+int populate_env_list(info_t *info)
 {
 	list_t *node = NULL;
 	size_t i;

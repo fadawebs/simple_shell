@@ -9,38 +9,37 @@
  */
 char *find_path(info_t *info, char *pathstr, char *cmd)
 {
-    int i = 0, curr_pos = 0;
-    char *path;
+int i = 0, curr_pos = 0;
+char *path;
 
-    if (!pathstr)
-        return (NULL);
-    if (_strlen(cmd) > 2 && starts_with(cmd, "./"))
-    {
-        if (is_cmd(info, cmd))
-            return (cmd);
-    }
-    while (1)
-    {
-        if (!pathstr[i] || pathstr[i] == ':')
-        {
-            path = dup_chars(pathstr, curr_pos, i);
-            if (!*path)
-                _strcat(path, cmd);
-            else
-            {
-                _strcat(path, "/");
-                _strcat(path, cmd);
-            }
-            if (is_cmd(info, path))
-                return (path);
-            free(path);
-            if (!pathstr[i])
-                break;
-            curr_pos = i + 1;
-        }
-        i++;
-    }
-    return (NULL);
+if (!pathstr)
+return (NULL);
+if (_strlen(cmd) > 2 && starts_with(cmd, "./"))
+{
+if (is_cmd(info, cmd))
+return (cmd);
+}
+while (1)
+{
+if (!pathstr[i] || pathstr[i] == ':')
+{
+path = dup_chars(pathstr, curr_pos, i);
+if (!*path)
+_strcat(path, cmd);
+{
+_strcat(path, "/");
+_strcat(path, cmd);
+}
+if (is_cmd(info, path))
+return (path);
+free(path);
+if (!pathstr[i])
+break;
+curr_pos = i + 1;
+}
+i++;
+}
+return (NULL);
 }
 
 /**
@@ -52,13 +51,13 @@ char *find_path(info_t *info, char *pathstr, char *cmd)
  */
 int is_cmd(info_t *info, char *path)
 {
-    struct stat st;
-    (void)info;
+struct stat st;
+(void)info;
 
-    if (!path || stat(path, &st) || !(st.st_mode & S_IFREG))
-        return (0);
+if (!path || stat(path, &st) || !(st.st_mode & S_IFREG))
+return (0);
 
-    return (1);
+return (1);
 }
 
 /**
@@ -71,17 +70,17 @@ int is_cmd(info_t *info, char *path)
  */
 char *dup_chars(char *pathstr, int start, int stop)
 {
-    char *buf;
-    int i, k;
+char *buf;
+int i, k;
 
-    buf = malloc((stop - start + 1) * sizeof(char));
-    if (!buf)
-        return (NULL);
+buf = malloc((stop - start + 1) * sizeof(char));
+if (!buf)
+return (NULL);
 
-    for (k = 0, i = start; i < stop; i++)
-        if (pathstr[i] != ':')
-            buf[k++] = pathstr[i];
-    buf[k] = '\0';
+for (k = 0, i = start; i < stop; i++)
+if (pathstr[i] != ':')
+buf[k++] = pathstr[i];
+buf[k] = '\0';
 
-    return (buf);
+return (buf);
 }

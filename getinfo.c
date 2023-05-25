@@ -1,5 +1,4 @@
 #include "shell.h"
-#include <stdbool.h>
 
 /**
  * clear_info - initializes info_t struct
@@ -31,7 +30,7 @@ void set_info(info_t *info, char **av)
 			info->argv = malloc(sizeof(char *) * 2);
 			if (info->argv)
 			{
-				info->argv[0] = tbtb_strdup(info->arg);
+				info->argv[0] = _strdup(info->arg);
 				info->argv[1] = NULL;
 			}
 		}
