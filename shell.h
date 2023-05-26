@@ -111,8 +111,6 @@ int (*func)(info_t *);
 } builtin_table;
 
 
-
-
 /* toem_shloop.c */
 int hsh(info_t *, char **);
 void find_cmd(info_t *);
