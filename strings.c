@@ -9,21 +9,19 @@
  */
 int _strcmp(const char *s1, const char *s2)
 {
-int i = 0;
+	int i = 0;
 
-if (s1 == NULL || s2 == NULL)
-{
-printf("s1: %s, s2: %s\n", s1, s2);
+	if (s1 == NULL || s2 == NULL)
+	{
+		printf("s1: %s, s2: %s\n", s1, s2);
 
-			/* "Error: one of the strings is null\n"); */
+		/* "Error: one of the strings is null\n"); */
+	}
+
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
 }
-
-
-while (s1[i] && s2[i] && s1[i] == s2[i])
-i++;
-return (s1[i] - s2[i]);
-}
-
 
 /**
  * _strlen - returns the length of a string
@@ -72,11 +70,11 @@ char *_strcat(char *dest, const char *src)
 {
 	char *ret = dest;
 
-	while (*dest)
+	while (*dest != '\0')
 		dest++;
 
-	while (*src)
-		*dest++ = *src++;
+	for (; *src != '\0'; dest++, src++)
+		*dest = *src;
 	*dest = '\0';
 
 	return (ret);

@@ -1,29 +1,20 @@
 #include "shell.h"
 
 /**
- * clear_info - initializes info_t struct
- * @info: struct address
- */
-void clear_info(info_t *info)
-{
-	info->arg = NULL;
-	info->argv = NULL;
-	info->path = NULL;
-	info->argc = 0;
-}
-
-/**
  * set_info - initializes info_t struct
  * @info: struct address
  * @av: argument vector
  */
 void set_info(info_t *info, char **av)
 {
-	int i = 0;
-
 	info->fname = av[0];
+
 	if (info->arg)
 	{
+		if (info->argv)
+		{
+			free(info->argv);
+		}
 		info->argv = split(info->arg, " \t");
 		if (!info->argv)
 		{
@@ -34,10 +25,14 @@ void set_info(info_t *info, char **av)
 				info->argv[1] = NULL;
 			}
 		}
-		for (i = 0; info->argv && info->argv[i]; i++)
-			;
-		info->argc = i;
-
+		info->argc = 0;
+		if (info->argv)
+		{
+			for (int i = 0; info->argv[i]; i++)
+			{
+				info->argc++;
+			}
+		}
 		replace_alias(info);
 		replace_vars(info);
 	}
@@ -67,4 +62,13 @@ void free_info(info_t *info, bool all)
 			close(info->readfd);
 		_putchar(BUF_FLUSH);
 	}
+}
+
+/**
+ * clear_info - initializes info_t struct
+ * @info: struct address
+ */
+void clear_info(info_t *info)
+{
+	memset(info, 0, sizeof(info_t));
 }

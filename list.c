@@ -10,39 +10,43 @@
  */
 list_t *add_node_end(list_t **head, const char *str, int num)
 {
-	list_t *shell_node, *node;
-
 	if (!head)
 		return (NULL);
 
-	node = *head;
-	shell_node = malloc(sizeof(list_t));
-	if (!shell_node)
+	list_t *new_node = malloc(sizeof(list_t));
+
+	if (!new_node)
 		return (NULL);
 
-	_memset((void *)shell_node, 0, sizeof(list_t));
-	shell_node->num = num;
+	_memset((void *)new_node, 0, sizeof(list_t));
+	new_node->num = num;
 
 	if (str)
 	{
-		shell_node->str = _strdup(str);
-		if (!shell_node->str)
+		new_node->str = _strdup(str);
+		if (!new_node->str)
 		{
-			free(shell_node);
+			free(new_node);
 			return (NULL);
 		}
 	}
 
-	if (node)
+	new_node->next = NULL;
+	if (*head)
 	{
-		while (node->next)
-			node = node->next;
-		node->next = shell_node;
+		list_t *tail = *head;
+
+		while (tail->next != NULL)
+			tail = tail->next;
+
+		tail->next = new_node;
 	}
 	else
-		*head = shell_node;
+	{
+		*head = new_node;
+	}
 
-	return (shell_node);
+	return (new_node);
 }
 
 /**
@@ -53,19 +57,21 @@ list_t *add_node_end(list_t **head, const char *str, int num)
  */
 void free_list(list_t **head_ptr)
 {
-	list_t *node, *next_node, *head;
-
-	if (!head_ptr || !*head_ptr)
-		return;
-	head = *head_ptr;
-	node = head;
-	while (node)
+	if (head_ptr == NULL || *head_ptr == NULL)
 	{
-		next_node = node->next;
-		free(node->str);
-		free(node);
-		node = next_node;
+		return;
 	}
+
+	list_t *current_node = *head_ptr, *next_node = NULL;
+
+	while (current_node != NULL)
+	{
+		next_node = current_node->next;
+		free(current_node->str);
+		free(current_node);
+		current_node = next_node;
+	}
+
 	*head_ptr = NULL;
 }
 
@@ -79,31 +85,30 @@ void free_list(list_t **head_ptr)
  */
 list_t *add_node(list_t **head, const char *str, int num)
 {
-	list_t *shell_head;
-
 	if (!head)
+	{
 		return (NULL);
-	shell_head = malloc(sizeof(list_t));
-	if (!shell_head)
+	}
+	list_t *new_node = malloc(sizeof(list_t));
+
+	if (!new_node)
+	{
 		return (NULL);
-
-	_memset((void *)shell_head, 0, sizeof(list_t));
-	shell_head->num = num;
-
+	}
+	_memset(new_node, 0, sizeof(list_t));
+	new_node->num = num;
 	if (str)
 	{
-		shell_head->str = _strdup(str);
-		if (!shell_head->str)
+		new_node->str = _strdup(str);
+		if (!new_node->str)
 		{
-			free(shell_head);
+			free(new_node);
 			return (NULL);
 		}
 	}
-
-	shell_head->next = *head;
-	*head = shell_head;
-
-	return (shell_head);
+	new_node->next = *head;
+	*head = new_node;
+	return (new_node);
 }
 
 /**
@@ -116,10 +121,18 @@ size_t print_list_str(const list_t *h)
 {
 	size_t i = 0;
 
-	while (h)
+	while (h != NULL)
 	{
-		_puts(h->str ? h->str : "(nil)");
-		_puts("\n");
+		if (h->str == NULL)
+		{
+			_puts("(nil)\n");
+
+		}
+		else
+		{
+			_puts(h->str);
+			_puts("\n");
+		}
 		h = h->next;
 		i++;
 	}

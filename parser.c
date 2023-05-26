@@ -1,4 +1,7 @@
 #include "shell.h"
+
+
+
 /**
  * find_path - finds this cmd in the PATH string
  * @info: the info struct
@@ -68,19 +71,28 @@ return (1);
  *
  * Return: pointer to new buffer
  */
-char *dup_chars(char *pathstr, int start, int stop)
+char *dup_chars(const char *pathstr, int start, int stop)
 {
-char *buf;
-int i, k;
+size_t buf_size = (size_t)(stop - start + 1);
+char *buf = malloc(buf_size);
 
-buf = malloc((stop - start + 1) * sizeof(char));
-if (!buf)
-return (NULL);
+if (buf != NULL)
+{
+const char *src = pathstr + start;
+char *dst = buf;
 
-for (k = 0, i = start; i < stop; i++)
-if (pathstr[i] != ':')
-buf[k++] = pathstr[i];
-buf[k] = '\0';
+while (start < stop && *src != '\0')
+{
+if (*src != ':')
+{
+*dst++ = *src;
+}
+
+src++;
+}
+
+*dst = '\0';
+}
 
 return (buf);
 }

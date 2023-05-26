@@ -1,6 +1,5 @@
 #include "shell.h"
 
-
 /**
  * unset_alias - convert alias to string
  * @info: parameter structure
@@ -33,16 +32,20 @@ int unset_alias(info_t *info, char *str)
  */
 int set_alias(info_t *info, char *str)
 {
-	char *p;
+	char *equal_sign;
 
-	p = _strchr(str, '=');
-	if (!p)
+	equal_sign = _strchr(str, '=');
+
+	if (equal_sign == NULL)
+	{
 		return (1);
-	if (!*++p)
+	}
+	if (*(equal_sign + 1) == '\0')
+	{
 		return (unset_alias(info, str));
-
+	}
 	unset_alias(info, str);
-	return (add_node_end(&(info->alias), str, 0) == NULL);
+	return (add_node_end(&(info->alias), str, 0) != NULL);
 }
 
 /**
@@ -53,19 +56,24 @@ int set_alias(info_t *info, char *str)
  */
 int print_alias(list_t *node)
 {
-	char *p = NULL, *a = NULL;
+if (node)
+{
+char *p = _strchr(node->str, '=');
 
-	if (node)
-	{
-		p = _strchr(node->str, '=');
-		for (a = node->str; a <= p; a++)
-			_putchar(*a);
-		_putchar('\'');
-		_puts(p + 1);
-		_puts("'\n");
-		return (0);
-	}
-	return (1);
+if (p)
+{
+size_t len = p - node->str;
+for (size_t i = 0; i < len; i++)
+{
+_putchar(node->str[i]);
+}
+_putchar('\'');
+_puts(p + 1);
+_puts("'\n");
+return (0);
+}
+}
+return (1);
 }
 
 /**
@@ -89,13 +97,19 @@ int _shellalias(info_t *info)
 		}
 		return (0);
 	}
+
 	for (i = 1; info->argv[i]; i++)
 	{
 		p = _strchr(info->argv[i], '=');
+		node = node_starts_with(info->alias, info->argv[i], '=');
 		if (p)
+		{
 			set_alias(info, info->argv[i]);
-		else
-			print_alias(node_starts_with(info->alias, info->argv[i], '='));
+		}
+		else if (node)
+		{
+			print_alias(node);
+		}
 	}
 
 	return (0);

@@ -1,6 +1,5 @@
-#include "shell.h"
-#ifndef LIST_H
-#define LIST_H
+#ifndef LIST_H_INCLUDED
+#define LIST_H_INCLUDED
 
 /**
  * struct list - Represents a linked list node.

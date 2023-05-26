@@ -1,6 +1,5 @@
 #include "shell.h"
 
-
 /**
  * _getenv - gets value of env_list variable
  * @info: Potential arguments active.
@@ -11,13 +10,11 @@
 char *_getenv(info_t *info, const char *name)
 {
 	list_t *node = info->env;
-	char *p;
 
-	while (node)
+	while (node != NULL)
 	{
-		p = starts_with(node->str, name);
-		if (p && *p)
-			return (p);
+		if (starts_with(node->str, name) == node->str)
+			return (node->str);
 		node = node->next;
 	}
 	return (NULL);
@@ -53,6 +50,28 @@ int _shellsetenv(info_t *info)
 }
 
 /**
+ * populate_env_list - populates env linked list
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ * Return: Always 0
+ */
+
+int populate_env_list(info_t *info)
+{
+	list_t *env_list = NULL;
+	size_t i = 0;
+
+	while (environ[i] != NULL)
+	{
+		add_node_end(&env_list, environ[i], 0);
+		i++;
+	}
+
+	info->env = env_list;
+	return (0);
+}
+
+/**
  * _shellunsetenv - Removes env_listment variable
  * @info: Potential arguments active.
  *  Return: Always 0
@@ -69,29 +88,5 @@ int _shellunsetenv(info_t *info)
 	for (i = 1; i < info->argc; i++)
 		_unsetenv(info, info->argv[i]);
 
-	return (0);
-}
-
-/**
- * populate_env_list - increases env linked list
- * @info: Potential arguments active
- * Return: Always 0
- */
-
-int populate_env_list(info_t *info)
-{
-	list_t *node = NULL;
-	size_t i;
-	/* char **env_list; */
-
-	env_list = NULL;
-	if (env_list == NULL)
-	{
-		return (-1);
-	}
-
-	for (i = 0; env_list[i]; i++)
-		add_node_end(&node, env_list[i], 0);
-	info->env = node;
 	return (0);
 }

@@ -43,19 +43,20 @@ int _setenv(info_t *info, char *var, char *value)
 }
 
 /**
- * get_env_list - returns the string array copy
- * @info: Potential arguments active.
+ * get_environ - returns the string array copy of our environ
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
  * Return: Always 0
  */
-char **get_env_list(info_t *info)
+char **get_environ(info_t *info)
 {
-	if (!info->env_list || info->env_changed)
+	if (!info->environ || info->env_changed)
 	{
-		info->env_list = list_to_strings(info->env);
+		info->environ = list_to_strings(info->env);
 		info->env_changed = 0;
 	}
 
-	return (info->env_list);
+	return (info->environ);
 }
 
 /**

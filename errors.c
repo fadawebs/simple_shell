@@ -1,6 +1,5 @@
 #include "shell.h"
 
-
 /**
  * _putfd - writes the character c to given fd
  * @c: The character to print
@@ -12,7 +11,7 @@
 int _putfd(char c, int fd)
 {
 	static int i;
-	static char buf[WRITE_BUF_SIZE];
+	static char buf[WRITE_BUF_SIZE] = {0};
 
 	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
@@ -20,7 +19,10 @@ int _putfd(char c, int fd)
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
-		buf[i++] = c;
+	{
+		buf[i] = c;
+		i++;
+	}
 	return (1);
 }
 
@@ -34,19 +36,20 @@ int _putfd(char c, int fd)
 int _eputchar(char c)
 {
 	static int i;
-	static char buf[WRITE_BUF_SIZE];
+	static char buf[WRITE_BUF_SIZE] = {0};
 
 	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-		write(2, buf, i);
+		write(STDERR_FILENO, buf, i);
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
-		buf[i++] = c;
+	{
+		buf[i] = c;
+		i++;
+	}
 	return (1);
 }
-
-
 
 /**
  *_putsfd - prints an input string
@@ -57,15 +60,17 @@ int _eputchar(char c)
  */
 int _putsfd(char *str, int fd)
 {
-	int i = 0;
+if (!str)
+return (0);
 
-	if (!str)
-		return (0);
-	while (*str)
-	{
-		i += _putfd(*str++, fd);
-	}
-	return (i);
+int i = 0;
+
+for (; *str != '\0'; str++)
+{
+i += _putfd(*str, fd);
+}
+
+return (i);
 }
 
 /**

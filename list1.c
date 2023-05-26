@@ -18,7 +18,6 @@ count++;
 return (count);
 }
 
-/*size_t list_len(const list_t *list)*/
 
 /**
  * list_to_strings - Returns an array of strings containing the contents of a
