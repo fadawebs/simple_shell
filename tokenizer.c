@@ -23,38 +23,28 @@ char **strtow2(char *str, char d)
 	if (numwords == 0)
 		return (NULL);
 
-	/* Allocate array of pointers to words */
 	s = malloc((1 + numwords) * sizeof(char *));
 	if (!s)
 		return (NULL);
 
 	for (i = 0, j = 0; j < numwords; j++)
-	{
-		/* Skip delimiters at beginning of word */
 		while (str[i] == d && str[i] != '\0')
 			i++;
 
-		/* Calculate length of current word */
 		k = 0;
 		while (str[i + k] != d && str[i + k] != '\0')
 			k++;
 		s[j] = malloc((k + 1) * sizeof(char));
 		if (!s[j])
-		{
-			/*  Free previously allocated memory and return  */
 			for (k = 0; k < j; k++)
 				free(s[k]);
 			free(s);
 			return (NULL);
-		}
 
-		/*Copy characters to new string */
 		for (m = 0; m < k; m++)
 			s[j][m] = str[i++];
 		s[j][m] = '\0';
-	}
 
-	/* Add null pointer at end of array */
 	s[j] = NULL;
 
 	return (s);
