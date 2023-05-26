@@ -40,50 +40,48 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
  */
 int replace_vars(info_t *info)
 {
-	int i;
-	list_t *node;
+int i;
+list_t *node;
 
-	for (i = 0; info->argv[i] != NULL; i++)
-	{
-		if (info->argv[i][0] != '$' || info->argv[i][1] == '\0')
-			continue;
+for (i = 0; info->argv[i] != NULL; i++)
+{
 
-		if (!_strcmp(info->argv[i], "$?"))
-		{
-			char *replacement = convert_number(info->status, 10, 0);
+if (info->argv[i][0] != '$' || info->argv[i][1] == '\0')
+{ continue; }
 
-			(replacement == NULL)
-				return (-1);
-			replace_string(&(info->argv[i]), _strdup(replacement));
-			free(replacement);
-			continue;
-		}
-
-		if (!_strcmp(info->argv[i], "$$"))
-		{
-			char *replacement = convert_number(getpid(), 10, 0);
-
-			if (replacement == NULL)
-				return (-1);
-			replace_string(&(info->argv[i]), _strdup(replacement));
-			free(replacement);
-			continue;
-		}
-
-		node = node_starts_with(info->env, &info->argv[i][1], '=');
-		if (node)
-		{
-			char *value = _strchr(node->str, '=') + 1;
-
-			replace_string(&(info->argv[i]), _strdup(value));
-			continue;
-		}
-
-		replace_string(&info->argv[i], _strdup(""));
-	}
-
-	return (0);
+if (!_strcmp(info->argv[i], "$?"))
+{
+char *replacement = convert_number(info->status, 10, 0);
+if (replacement == NULL)
+return (-1);
+replace_string(&(info->argv[i]), _strdup(replacement));
+free(replacement);
+continue;
 }
+
+if (!_strcmp(info->argv[i], "$$"))
+{
+char *replacement = convert_number(getpid(), 10, 0);
+if (replacement == NULL)
+return (-1);
+replace_string(&(info->argv[i]), _strdup(replacement));
+free(replacement);
+continue;
+}
+node = node_starts_with(info->env, &info->argv[i][1], '=');
+if (node)
+{
+char *value = _strchr(node->str, '=') + 1;
+replace_string(&(info->argv[i]), _strdup(value));
+continue;
+}
+
+replace_string(&info->argv[i], _strdup(""));
+}
+
+return (0);
+}
+
 
 /**
  * replace_string - replaces string
