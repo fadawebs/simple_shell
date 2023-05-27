@@ -2,7 +2,7 @@
 
 /**
  * print_list - Prints the contents of a linked list.
- * @: Pointer to the head node
+ * @h: Pointer to the head node
  * Return: Number of nodes in the list.
  */
 size_t print_list(const list_t *h)
