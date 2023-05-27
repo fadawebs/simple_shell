@@ -2,8 +2,7 @@
 
 /**
  * print_list - Prints the contents of a linked list.
- * @h: Pointer to the head node.
- *
+ * @head: Pointer to the head node
  * Return: Number of nodes in the list.
  */
 size_t print_list(const list_t *head)
@@ -25,7 +24,7 @@ size_t print_list(const list_t *head)
 
 
 /**
- * list_len_t - Returns the number of nodes in a linked list.
+ * list_len - Returns the number of nodes in a linked list.
  * @head: Pointer to the head node.
  * Return: Number of nodes.
  */
@@ -105,7 +104,7 @@ char **list_to_strings(list_t *head)
 /**
  * node_starts_with - Returns the first node in a linked list whose string
  * starts with a given prefix.
- * @head: Pointer to the head node.
+ * @node: Pointer to the head node.
  * @prefix: Prefix to match.
  * @c: Character that comes after the prefix.
  *
@@ -124,4 +123,3 @@ list_t *node_starts_with(list_t *node, char *prefix, char c)
 	}
 	return (NULL);
 }
-
