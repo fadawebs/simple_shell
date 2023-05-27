@@ -1,7 +1,6 @@
 #include "shell.h"
 
 
-
 /**
  * build_history_list - adds entry to a history linked list
  * @info: Structure containing potential arguments. Used to maintain
@@ -11,10 +10,7 @@
  */
 int build_history_list(info_t *info, char *buf, int linecount)
 {
-list_t *node = NULL;
-
-if (info->history)
-node = info->history;
+list_t *node = info->history;
 
 add_node_end(&node, buf, linecount);
 
@@ -23,32 +19,7 @@ info->history = node;
 
 return (0);
 }
-/**
- * get_history_file - gets the history file
- * @info: parameter struct
- * Return: allocated string containg history file
- */
-char *get_history_file(info_t *info)
-{
-char *dir = _getenv(info, "HOME=");
-if (!dir)
-return (NULL);
 
-size_t dir_len = _strlen(dir);
-size_t file_len = _strlen(HIST_FILE);
-
-char *buf = malloc(sizeof(char) * (dir_len + file_len + 2));
-if (!buf)
-return (NULL);
-buf[0] = '\0';
-
-_strcpy(buf, dir);
-_strcat(buf, "/");
-
-_strcat(buf, HIST_FILE);
-_strcat(buf, "\n");
-return (buf);
-}
 
 /**
  * write_history - creates a file, or appends to an existing file
@@ -82,3 +53,32 @@ _putfd(BUF_FLUSH, fd);
 close(fd);
 return (1);
 }
+
+
+/**
+ * get_history_file - gets the history file
+ * @info: parameter struct
+ * Return: allocated string containing history file
+ */
+char *get_history_file(info_t *info)
+{
+	char *buf, *dir;
+	size_t dir_len, file_len;
+
+	dir = _getenv(info, "HOME=");
+	if (!dir)
+		return (NULL);
+
+	dir_len = _strlen(dir);
+	file_len = _strlen(HIST_FILE);
+	buf = malloc(sizeof(char) * (dir_len + file_len + 2));
+	if (!buf)
+		return (NULL);
+
+	buf[0] = '\0';
+	_strcpy(buf, dir);
+	_strcat(buf, "/");
+	_strcat(buf, HIST_FILE);
+	return (buf);
+}
+

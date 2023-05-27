@@ -1,4 +1,6 @@
 #include "shell.h"
+#include "shell.h"
+
 
 /**
  * read_buf - reads a buffer
@@ -10,14 +12,14 @@
  */
 ssize_t read_buf(info_t *info, char *buf, size_t *i)
 {
-ssize_t r = 0;
+	ssize_t r = 0;
 
-if (*i)
-return (0);
-r = read(info->readfd, buf, READ_BUF_SIZE);
-if (r >= 0)
-*i = r;
-return (r);
+	if (*i)
+		return (0);
+	r = read(info->readfd, buf, READ_BUF_SIZE);
+	if (r >= 0)
+		*i = r;
+	return (r);
 }
 
 /**
@@ -44,42 +46,38 @@ _putchar(BUF_FLUSH);
 
 ssize_t input_buf(info_t *info, char **buf, size_t *len)
 {
-ssize_t r = 0;
-if (!*len)
-{
-free(*buf);
-*buf = NULL;
-signal(SIGINT, sigintHandler);
+	ssize_t r = 0;
+	size_t len_p = 0;
 
-size_t len_p = 0;
+	if (!*len) /* if nothing left in the buffer, fill it */
+	{
+		/*bfree((void **)info->cmd_buf);*/
+		free(*buf);
+		*buf = NULL;
+		signal(SIGINT, sigintHandler);
 #if USE_GETLINE
-r = getline(buf, &len_p, stdin);
+		r = getline(buf, &len_p, stdin);
 #else
-r = _getline(info, buf, &len_p);
+		r = _getline(info, buf, &len_p);
 #endif
-
-if (r > 0)
-{
-if ((*buf)[r - 1] == '\n')
-{
-(*buf)[r - 1] = '\0';
-r--;
-}
-info->linecount_flag = 1;
-remove_comments(*buf);
-build_history_list(info, *buf, info->histcount++);
-if (_strchr(*buf, ';'))
-{
-*len = r;
-info->cmd_buf = buf;
-}
-else
-{
-*len = r + 1;
-}
-}
-}
-return (r);
+		if (r > 0)
+		{
+			if ((*buf)[r - 1] == '\n')
+			{
+				(*buf)[r - 1] = '\0'; /* remove trailing newline */
+				r--;
+			}
+			info->linecount_flag = 1;
+			remove_comments(*buf);
+			build_history_list(info, *buf, info->histcount++);
+			/* if (_strchr(*buf, ';')) is this a command chain? */
+			{
+				*len = r;
+				info->cmd_buf = buf;
+			}
+		}
+	}
+	return (r);
 }
 
 /**
@@ -90,30 +88,40 @@ return (r);
  */
 int _getline(info_t *info, char **ptr, size_t *length)
 {
-static char buf[READ_BUF_SIZE];
-static size_t i, len;
-ssize_t r = read_buf(info, buf + len, &(READ_BUF_SIZE - len));
+	static char buf[READ_BUF_SIZE];
+	static size_t i, len;
+	size_t k;
+	ssize_t r = 0, s = 0;
+	char *p = NULL, *new_p = NULL, *c;
 
-if (r < 1)
-return (-1);
+	p = *ptr;
+	if (p && length)
+		s = *length;
+	if (i == len)
+		i = len = 0;
 
-len += r;
-char *pos = memchr(buf + i, '\n', len - i);
-size_t new_len = pos ? (size_t)(pos - buf) + 1 : len;
-char *new_ptr = realloc(*ptr, new_len);
+	r = read_buf(info, buf, &len);
+	if (r == -1 || (r == 0 && len == 0))
+		return (-1);
 
-if (!new_ptr)
-return (free(*ptr), *ptr = NULL, -1);
+	c = _strchr(buf + i, '\n');
+	k = c ? 1 + (unsigned int)(c - buf) : len;
+	new_p = _realloc(p, s, s ? s + k : k + 1);
+	if (!new_p) /* MALLOC FAILURE! */
+		return (p ? free(p), -1 : -1);
 
-*ptr = new_ptr;
-memcpy(new_ptr, buf + i, new_len - i);
-*length = new_len - i;
+	if (s)
+		_strncat(new_p, buf + i, k - i);
+	else
+		_strncpy(new_p, buf + i, k - i + 1);
 
-if (new_len == len)
-i = len = 0;
-else
-i = (size_t)(pos - buf) + 1;
+	s += k - i;
+	i = k;
+	p = new_p;
 
-return ((ssize_t)(*length));
+	if (length)
+		*length = s;
+	*ptr = p;
+	return (s);
 }
 

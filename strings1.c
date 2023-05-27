@@ -13,16 +13,13 @@ int _putchar(char c)
 	static int i;
 	static char buf[WRITE_BUF_SIZE];
 
-	if (i >= WRITE_BUF_SIZE || c == BUF_FLUSH)
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
 	{
-		write(STDOUT_FILENO, buf, i);
+		write(1, buf, i);
 		i = 0;
 	}
 	if (c != BUF_FLUSH)
-	{
 		buf[i++] = c;
-	}
-
 	return (1);
 }
 
@@ -34,20 +31,23 @@ int _putchar(char c)
  * Return: pointer to destination
  */
 
-char *_strcpy(char *dest, const char *src)
+char *_strcpy(char *dest, char *src)
 {
 	int i = 0;
 
-	if (dest == src || src == NULL)
+	if (dest == src || src == 0)
 		return (dest);
 	while (src[i])
 	{
 		dest[i] = src[i];
 		i++;
 	}
-	dest[i] = '\0';
+	dest[i] = 0;
 	return (dest);
 }
+
+
+
 /**
  * _puts - prints an input string
  * @str: the string to be printed
@@ -80,17 +80,12 @@ char *_strdup(const char *str)
 
 	if (str == NULL)
 		return (NULL);
-
-	/*   Calculate string length   */
-	while (str[length] != '\0')
+	while (*str++)
 		length++;
-
 	ret = malloc(sizeof(char) * (length + 1));
-	if (ret == NULL)
+	if (!ret)
 		return (NULL);
-
-	for (int i = length - 1; i >= 0; i--)
-		ret[i] = str[i];
-
+	for (length++; length--;)
+		ret[length] = *--str;
 	return (ret);
 }

@@ -24,93 +24,55 @@ node = node->next;
 }
 return (info->histcount = i);
 }
-/**
- * read_history - Reads the command history from a file.
- * @info: Structure containing potential arguments.
- * @param file The name of the file to read from.
- * Return: implementation goes here
- */
 
+
+
+/**
+ * read_history - reads history from file
+ * @info: the parameter struct
+ *
+ * Return: histcount on success, 0 otherwise
+ */
 int read_history(info_t *info)
 {
-char *filename = get_history_file(info);
-if (!filename)
-return (0);
+	int i, last = 0, linecount = 0;
+	ssize_t fd, rdlen, fsize = 0;
+	struct stat st;
+	char *buf = NULL, *filename = get_history_file(info);
 
-int fd = open(filename, O_RDONLY);
-free(filename);
-if (fd == -1)
-return (0);
+	if (!filename)
+		return (0);
 
-/*
- * read_file - Read a file descriptor into a buffer.
- *
- * @param fd The file descriptor to read from.
- * @param buf The buffer to read into.
- * @param len The number of bytes to read.
- * @return The number of bytes successfully read, or -1 on error.
- */
-
-char *buf = read_file(fd);
-close(fd);
-if (!buf)
-return (0);
-
-nt linecount = parse_history(buf, info);
-free(buf);
-truncate_history(info);
-return (linecount);
-}
-
-char *read_file(int fd)
-{
-struct stat st;
-fstat(fd, &st);
-size_t fsize = st.st_size;
-if (fsize < 2)
-return (NULL);
-
-char *buf = malloc(fsize + 1);
-if (!buf)
-return (NULL);
-ssize_t rdlen = read(fd, buf, fsize);
-buf[fsize] = '\0';
-if (rdlen <= 0)
-{
-free(buf);
-return (NULL);
-}
-return (buf);
-}
-
-int parse_history(char *buf, info_t *info)
-{
-int linecount = 0;
-int last = 0;
-for (int i = 0; buf[i] != '\0'; i++)
-{
-if (buf[i] == '\n')
-{
-buf[i] = '\0';
-build_history_list(info, buf + last, linecount++);
-last = i + 1;
-}
-}
-if (last != strlen(buf))
-{
-build_history_list(info, buf + last, linecount++);
-}
-info->histcount = linecount;
-return (linecount);
-}
-
-void truncate_history(info_t *info)
-{
-while (info->histcount >= HIST_MAX)
-{
-delete_node_at_index(&(info->history), 0);
-info->histcount--;
-}
-renumber_history(info);
+	fd = open(filename, O_RDONLY);
+	free(filename);
+	if (fd == -1)
+		return (0);
+	if (!fstat(fd, &st))
+		fsize = st.st_size;
+	if (fsize < 2)
+		return (0);
+	buf = malloc(sizeof(char) * (fsize + 1));
+	if (!buf)
+		return (0);
+	rdlen = read(fd, buf, fsize);
+	buf[fsize] = 0;
+	if (rdlen <= 0)
+		return (free(buf), 0);
+	close(fd);
+	for (i = 0; i < fsize; i++)
+		if (buf[i] == '\n')
+		{
+			buf[i] = 0;
+			build_history_list(info, buf + last, linecount++);
+			last = i + 1;
+		}
+	if (last != i)
+		build_history_list(info, buf + last, linecount++);
+	free(buf);
+	info->histcount = linecount;
+	while (info->histcount-- >= HIST_MAX)
+		delete_node_at_index(&(info->history), 0);
+	renumber_history(info);
+	return (info->histcount);
 }
 

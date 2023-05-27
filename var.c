@@ -1,5 +1,23 @@
 #include "shell.h"
 
+
+
+/**
+ * replace_string - replaces string
+ * @old: address of old string
+ * @new: new string
+ *
+ * Return: 1 if replaced, 0 otherwise
+ */
+int replace_string(char **old, char *new)
+{
+	free(*old);
+	*old = new;
+	return (1);
+}
+
+
+
 /**
  * check_chain - checks we should continue chaining based on last status
  * @info: the parameter struct
@@ -40,62 +58,39 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
  */
 int replace_vars(info_t *info)
 {
-int i;
-list_t *node;
+	int i = 0;
+	list_t *node;
 
-for (i = 0; info->argv[i] != NULL; i++)
-{
+	for (i = 0; info->argv[i]; i++)
+	{
+		if (info->argv[i][0] != '$' || !info->argv[i][1])
+			continue;
 
-if (info->argv[i][0] != '$' || info->argv[i][1] == '\0')
-{ continue; }
+		if (!_strcmp(info->argv[i], "$?"))
+		{
+			replace_string(&(info->argv[i]),
+				_strdup(convert_number(info->status, 10, 0)));
+			continue;
+		}
+		if (!_strcmp(info->argv[i], "$$"))
+		{
+			replace_string(&(info->argv[i]),
+				_strdup(convert_number(getpid(), 10, 0)));
+			continue;
+		}
+		node = node_starts_with(info->env, &info->argv[i][1], '=');
+		if (node)
+		{
+			replace_string(&(info->argv[i]),
+				_strdup(_strchr(node->str, '=') + 1));
+			continue;
+		}
+		replace_string(&info->argv[i], _strdup(""));
 
-if (!_strcmp(info->argv[i], "$?"))
-{
-char *replacement = convert_number(info->status, 10, 0);
-if (replacement == NULL)
-return (-1);
-replace_string(&(info->argv[i]), _strdup(replacement));
-free(replacement);
-continue;
+	}
+	return (0);
 }
 
-if (!_strcmp(info->argv[i], "$$"))
-{
-char *replacement = convert_number(getpid(), 10, 0);
-if (replacement == NULL)
-return (-1);
-replace_string(&(info->argv[i]), _strdup(replacement));
-free(replacement);
-continue;
-}
-node = node_starts_with(info->env, &info->argv[i][1], '=');
-if (node)
-{
-char *value = _strchr(node->str, '=') + 1;
-replace_string(&(info->argv[i]), _strdup(value));
-continue;
-}
-
-replace_string(&info->argv[i], _strdup(""));
-}
-
-return (0);
-}
-
-
-/**
- * replace_string - replaces string
- * @old: address of old string
- * @new: new string
- *
- * Return: 1 if replaced, 0 otherwise
- */
-int replace_string(char **old, char *new)
-{
-	free(*old);
-	*old = new;
-	return (1);
-}
 
 /**
  * replace_alias - replaces an aliases in the tokenized string

@@ -10,11 +10,13 @@
 char *_getenv(info_t *info, const char *name)
 {
 	list_t *node = info->env;
+	char *p;
 
-	while (node != NULL)
+	while (node)
 	{
-		if (starts_with(node->str, name) == node->str)
-			return (node->str);
+		p = starts_with(node->str, name);
+		if (p && *p)
+			return (p);
 		node = node->next;
 	}
 	return (NULL);
@@ -58,16 +60,12 @@ int _shellsetenv(info_t *info)
 
 int populate_env_list(info_t *info)
 {
-	list_t *env_list = NULL;
-	size_t i = 0;
+	list_t *node = NULL;
+	size_t i;
 
-	while (environ[i] != NULL)
-	{
-		add_node_end(&env_list, environ[i], 0);
-		i++;
-	}
-
-	info->env = env_list;
+	for (i = 0; environ[i]; i++)
+		add_node_end(&node, environ[i], 0);
+	info->env = node;
 	return (0);
 }
 
