@@ -81,7 +81,11 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 }
 
 /**
- * get_input - gets a line of input from STDIN
+ * _getline - gets a line of input from STDIN
+ * @ptr: a pointer to an argument is used to store the address
+ * of a buffer that will hold the line of input read by the function
+ * @length: pointer to an argument is used to store the length
+ * of the line of input read by the function
  * @info: parameter struct
  *
  * Return: bytes read
