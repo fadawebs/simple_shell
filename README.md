@@ -2,7 +2,7 @@
 # Simple_shell
 ![233871011-48a38205-ac8b-4c3a-bbb9-16618cd5fd5b](https://user-images.githubusercontent.com/36473098/233871153-f188a94d-8860-4218-811d-cdd65685d8b9.jpg)
 
-## Background Context
+##The Background Context
 Write a simple UNIX command interpreter.
  ^ “The Gates of Shell”, by [Spencer Cheng](https://intranet.alxswe.com/rltoken/AtYRSM03vJDrko9xHodxFQ), featuring [Julien Barbier](https://intranet.alxswe.com/rltoken/-ezXgcyfhc8qU1DeUInLUA)
 
